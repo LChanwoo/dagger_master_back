@@ -30,4 +30,8 @@ export class AuthService {
     await this.itemRepository.createUserInventory(user_id);
     return user;
   }
+
+  async updateLoginDate(user_id: number) {
+    return await this.authRepository.updateLoginDate(user_id);
+  }
 }

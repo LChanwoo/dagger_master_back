@@ -11,7 +11,8 @@ export class ScoreRepository {
                 B.EMAIL,
                 B.NICKNAME,
                 MAX(A.SCORE) AS SCORE,
-                (DENSE_RANK() OVER (ORDER BY MAX(A.SCORE) DESC)) AS RANKING
+                (DENSE_RANK() OVER (ORDER BY MAX(A.SCORE) DESC)) AS RANKING,
+                MAX(A.PLAY_DATE) AS PLAY_DATE
             FROM TB_RESULT A
                 INNER JOIN TB_USER B
                 ON A.USER_ID = B.USER_ID
