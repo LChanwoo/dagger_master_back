@@ -10,6 +10,7 @@ import { ScoreModule } from './score/score.module';
 import { ItemModule } from './item/item.module';
 import { MailModule } from './mail/mail.module';
 import { RedisModule } from './redis/redis.module';
+import { ShopModule } from './shop/shop.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RedisModule } from './redis/redis.module';
     ItemModule,
     MailModule,
     RedisModule,
+    ShopModule,
   ],
   controllers: [AppController],
   providers: [AppService],
