@@ -14,7 +14,9 @@ export class ItemRepository {
   async createUserInventory(userId: number) {
     const Items = await this.getItems();
     const query = `
-            INSERT INTO TB_INVENTORY (USER_ID, ITEM_ID, QTY) VALUES (?, ?, ?);
+            INSERT INTO TB_INVENTORY
+                (USER_ID, ITEM_ID, QTY)
+            VALUES (?, ?, ?);
         `;
     const queries = Items.map(async (item) => {
       const params = [userId, item.ITEM_ID, 0];
@@ -25,7 +27,16 @@ export class ItemRepository {
 
   async getUserInventory(userId: number) {
     const query = `
-                SELECT * FROM TB_INVENTORY WHERE USER_ID = ?;
+                SELECT
+                    A.ITEM_ID,
+                    B.ITEM_NAME,
+                    B.ITEM_TYPE,
+                    B.ITEM_DESCRIPTION,
+                    A.QTY
+                FROM TB_INVENTORY A
+                INNER JOIN TB_ITEM B
+                ON A.ITEM_ID = B.ITEM_ID
+                WHERE USER_ID = ?;
             `;
     const params = [userId];
     return await this.mysqlService.query(query, params);
@@ -34,26 +45,46 @@ export class ItemRepository {
     const query = `
                 SELECT A.*
                 FROM TB_INVENTORY A
-                INNER JOIN TB_ITEM B
-                ON A.ITEM_ID = B.ITEM_ID
+                    INNER JOIN TB_ITEM B
+                    ON A.ITEM_ID = B.ITEM_ID
                 WHERE
                     USER_ID = ? AND ITEM_TYPE = ?;
             `;
     const params = [userId, itemType];
     return await this.mysqlService.query(query, params);
   }
+  async addNotHaveItemToInventoryByItemId(user_id: number, itemId: number) {
+    const query = `
+            INSERT INTO TB_INVENTORY
+                (USER_ID, ITEM_ID, QTY)
+            VALUES (?, ?, 0);
+        `;
+    const params = [itemId, user_id];
+    return await this.mysqlService.query(query, params);
+  }
 
-  async getItemInInventoryByItemId(
+  async addItemInInventoryByItemId(
     user_id: number,
     itemId: number,
     itemQty: number,
   ) {
+    console.log(itemQty);
     const query = `
             UPDATE TB_INVENTORY
             SET QTY = QTY + ?
             WHERE ITEM_ID = ? AND USER_ID = ?;
         `;
     const params = [itemQty, itemId, user_id];
+    return await this.mysqlService.query(query, params);
+  }
+
+  async addPlayerGoldByUserId(user_id: number, gold: number) {
+    const query = `
+            UPDATE TB_INVENTORY
+            SET QTY = QTY + ?
+            WHERE USER_ID = ? AND ITEM_ID = 1;
+        `;
+    const params = [gold, user_id];
     return await this.mysqlService.query(query, params);
   }
 }

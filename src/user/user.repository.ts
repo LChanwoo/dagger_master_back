@@ -12,6 +12,13 @@ export class UserRepository {
     return await this.mysqlService.query(query);
   }
 
+  async getAllUser() {
+    const query = `
+            SELECT * FROM TB_USER;
+        `;
+    return await this.mysqlService.query(query);
+  }
+
   async createUser(email: string, password: string) {
     const query = `
             INSERT INTO TB_USER

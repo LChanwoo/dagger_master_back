@@ -10,13 +10,14 @@ export class ScoreRepository {
             SELECT
                 B.EMAIL,
                 B.NICKNAME,
-                MAX(SCORE) AS SCORE
-            FROM TB_SCORE A
+                MAX(A.SCORE) AS SCORE,
+                (DENSE_RANK() OVER (ORDER BY MAX(A.SCORE) DESC)) AS RANKING
+            FROM TB_RESULT A
                 INNER JOIN TB_USER B
                 ON A.USER_ID = B.USER_ID
-            GROUP BY USER_ID
-            ORDER BY SCORE DESC
-            LIMIT 100;
+            GROUP BY A.USER_ID
+            ORDER BY MAX(A.SCORE) DESC
+            ;
         `;
     return await this.mysqlService.query(query);
   }
@@ -27,22 +28,22 @@ export class ScoreRepository {
                 B.EMAIL,
                 B.NICKNAME,
                 MAX(SCORE) AS SCORE
-            FROM TB_SCORE A
+            FROM TB_RESULT A
                 INNER JOIN TB_USER B
                 ON A.USER_ID = B.USER_ID
-            GROUP BY USER_ID
-            ORDER BY SCORE DESC
+            GROUP BY A.USER_ID
+            ORDER BY MAX(SCORE) DESC
             LIMIT 100)
             UNION
             (SELECT
                 B.EMAIL,
                 B.NICKNAME,
                 MAX(SCORE) AS SCORE
-            FROM TB_SCORE A
+            FROM TB_RESULT A
                 INNER JOIN TB_USER B
                 ON A.USER_ID = B.USER_ID
             WHERE A.USER_ID = ?
-            GROUP BY USER_ID);
+            GROUP BY A.USER_ID);
         `;
     const params = [user_id];
     return await this.mysqlService.query(query, params);
@@ -54,7 +55,7 @@ export class ScoreRepository {
                 A.USER_ID,
                 B.EMAIL,
                 B.NICKNAME,
-                MAX(SCORE) AS SCORE
+                MAX(SCORE) AS SCORE,
             FROM TB_RESULT A
                 INNER JOIN TB_USER B
                 ON A.USER_ID = B.USER_ID

@@ -13,8 +13,8 @@ import { UserModule } from 'src/user/user.module';
   imports: [
     PassportModule.register({ session: true }),
     MysqlModule,
-    forwardRef(() => ItemModule),
-    forwardRef(() => UserModule),
+    ItemModule,
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthRepository, SessionSerializer, LocalStrategy],

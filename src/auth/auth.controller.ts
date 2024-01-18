@@ -12,8 +12,9 @@ export class AuthController {
 
   @Post('/login')
   @UseGuards(LocalAuthGuard)
-  public async login(@User() user: UserDataDto) {
-    return user;
+  public async login(@User() user: UserDataDto): Promise<any> {
+    const { SUB_ID, CREATE_DATE, ...result } = user;
+    return result;
     // return this.logger.log(user.email + ' logged in ' + new Date().toISOString());
   }
 

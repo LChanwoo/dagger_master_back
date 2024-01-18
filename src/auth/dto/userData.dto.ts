@@ -2,11 +2,17 @@ import { IsEmail, IsEmpty, IsNumber, IsString } from 'class-validator';
 
 export class UserDataDto {
   @IsNumber()
-  user_id!: number;
+  USER_ID!: number;
 
   @IsEmail()
-  email!: string;
+  EMAIL!: string;
 
   @IsString()
-  nickname!: string;
+  NICKNAME!: string;
+
+  @IsEmpty()
+  SUB_ID!: string;
+
+  @IsEmpty()
+  CREATE_DATE!: string;
 }
