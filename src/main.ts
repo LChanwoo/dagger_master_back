@@ -8,6 +8,7 @@ import * as passport from 'passport';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as expressBasicAuth from 'express-basic-auth';
 
 const { SESSION_SECRET, PORT } = process.env;
 
@@ -37,16 +38,24 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(passport.initialize());
   app.use(passport.session());
-
+  app.use(
+    ['/docs'], // docs(swagger end point)에 진입시
+    expressBasicAuth({
+      challenge: true,
+      users: {
+        [process.env.SWAGGER_USER]: process.env.SWAGGER_PASSWORD, // 지정된 ID/비밀번호
+      },
+    }),
+  );
   const config = new DocumentBuilder()
     .setTitle('API example')
     .setDescription('The MoleKiller API description')
     .setVersion('1.0')
     .addTag('molekiller')
-    .addBearerAuth()
+    .addCookieAuth('connect.sid')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(PORT || 9400);
   console.log(`Application is running on: ${await app.getUrl()}`);

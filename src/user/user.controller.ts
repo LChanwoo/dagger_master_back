@@ -4,6 +4,7 @@ import { User } from 'src/common/decorators/user.decorator';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { ItemService } from 'src/item/item.service';
 import { UserDataDto } from 'src/auth/dto/userData.dto';
+import { PostNicknameDto } from './dto/postNickname.dto';
 
 @Controller('user')
 export class UserController {
@@ -24,7 +25,10 @@ export class UserController {
 
   @Post('nickname')
   @UseGuards(AuthenticatedGuard)
-  async changeNickname(@User() user: UserDataDto, @Body() body: any) {
+  async changeNickname(
+    @User() user: UserDataDto,
+    @Body() body: PostNicknameDto,
+  ) {
     return await this.userService.changeNickname(user.USER_ID, body.nickname);
   }
 

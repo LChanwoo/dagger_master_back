@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { User } from 'src/common/decorators/user.decorator';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+import { PostMailDto } from './dto/postMail.dto';
 
 @Controller('mail')
 @UseGuards(AuthenticatedGuard)
@@ -9,7 +10,7 @@ export class MailController {
   constructor(private readonly mailService: MailService) {}
 
   @Post()
-  async postMail(@User() user: any, @Body() body: any) {
+  async postMail(@User() user: any, @Body() body: PostMailDto) {
     const { user_id, title, contents, item_id, qty } = body;
     return await this.mailService.postMail(
       user_id,
