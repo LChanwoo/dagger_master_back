@@ -13,8 +13,8 @@ export class SuperUserStrategy extends PassportStrategy(Strategy, 'superuser') {
   }
 
   async validate(address: string, password: string, done: any) {
+    console.log(address, password);
     try {
-      console.log(address, password);
       let user = await this.authService.validateSuperUser(address, password);
       if (!user) {
         return done(null, false, { message: 'Incorrect address or password' });
