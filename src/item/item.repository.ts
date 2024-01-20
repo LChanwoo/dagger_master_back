@@ -68,7 +68,6 @@ export class ItemRepository {
     itemId: number,
     itemQty: number,
   ) {
-    console.log(itemQty);
     const query = `
             UPDATE TB_INVENTORY
             SET QTY = QTY + ?
@@ -85,6 +84,61 @@ export class ItemRepository {
             WHERE USER_ID = ? AND ITEM_ID = 1;
         `;
     const params = [gold, user_id];
+    return await this.mysqlService.query(query, params);
+  }
+
+  async subtractPlayerGoldByUserId(user_id: number, gold: number) {
+    const query = `
+            UPDATE TB_INVENTORY
+            SET QTY = QTY - ?
+            WHERE USER_ID = ? AND ITEM_ID = 1;
+        `;
+    const params = [gold, user_id];
+    return await this.mysqlService.query(query, params);
+  }
+  async getGoldByUserId(user_id: number) {
+    const query = `
+            SELECT QTY
+            FROM TB_INVENTORY
+            WHERE USER_ID = ? AND ITEM_ID = 1;
+        `;
+    const params = [user_id];
+    return await this.mysqlService.query(query, params);
+  }
+  async isUserHaveItemByUserIdAndShopId(user_id: number, shop_id: number) {
+    const query = `
+            SELECT
+                A.ITEM_ID,
+                B.ITEM_NAME,
+                B.ITEM_TYPE,
+                B.ITEM_DESCRIPTION, 
+                A.QTY
+            FROM TB_INVENTORY A
+            INNER JOIN TB_ITEM B
+                ON A.ITEM_ID = B.ITEM_ID
+            INNER JOIN TB_SHOP C
+                ON B.ITEM_ID = C.SHOP_ITEM_ID
+            WHERE USER_ID = ? AND SHOP_ID = ?;
+        `;
+    const params = [user_id, shop_id];
+    return await this.mysqlService.query(query, params);
+  }
+  async isUserHaveItemByUserIdAndItemId(user_id: number, item_id: number) {
+    const query = `
+            SELECT
+                A.ITEM_ID,
+                B.ITEM_NAME,
+                B.ITEM_TYPE,
+                B.ITEM_DESCRIPTION, 
+                A.QTY
+            FROM TB_INVENTORY A
+            INNER JOIN TB_ITEM B
+                ON A.ITEM_ID = B.ITEM_ID
+            INNER JOIN TB_SHOP C
+                ON B.ITEM_ID = C.SHOP_ITEM_ID
+            WHERE USER_ID = ? AND ITEM_ID = ?;
+        `;
+    const params = [user_id, item_id];
     return await this.mysqlService.query(query, params);
   }
 }
