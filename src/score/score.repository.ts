@@ -26,6 +26,7 @@ export class ScoreRepository {
   async getScoreListWithUser(user_id: number) {
     const query = `
             (SELECT
+                B.USER_ID,
                 B.EMAIL,
                 B.NICKNAME,
                 MAX(SCORE) AS SCORE
@@ -37,6 +38,7 @@ export class ScoreRepository {
             LIMIT 100)
             UNION
             (SELECT
+                B.USER_ID,
                 B.EMAIL,
                 B.NICKNAME,
                 MAX(SCORE) AS SCORE
@@ -56,7 +58,7 @@ export class ScoreRepository {
                 A.USER_ID,
                 B.EMAIL,
                 B.NICKNAME,
-                MAX(SCORE) AS SCORE,
+                MAX(SCORE) AS SCORE
             FROM TB_RESULT A
                 INNER JOIN TB_USER B
                 ON A.USER_ID = B.USER_ID

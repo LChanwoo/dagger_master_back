@@ -19,7 +19,13 @@ export class ScoreService {
 
   async getScoreListWithUser(user_id: number) {
     const ranking = await this.scoreRepository.getScoreListWithUser(user_id);
-    return ranking.slice(0, 101);
+    const ranking_board = ranking.slice(0, 101);
+    const user_ranking = ranking.find((user) => user.USER_ID === user_id);
+    console.log(user_id);
+    return {
+      ranking_board,
+      user_ranking,
+    };
   }
 
   async createScoreByUserId(user_id: number, score: number) {
