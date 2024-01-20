@@ -33,4 +33,10 @@ export class MailController {
   async getMailItem(@User() user: any, @Param('mail_id') mail_id: number) {
     return await this.mailService.getMailItem(user.USER_ID, mail_id);
   }
+  @Get('/all/mails')
+  async getAllMail(@User() user: any) {
+    const { USER_ID } = user;
+    console.log(USER_ID);
+    return await this.mailService.recieveAllMailAndItem(USER_ID);
+  }
 }

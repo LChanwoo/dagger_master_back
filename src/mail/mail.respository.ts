@@ -111,4 +111,13 @@ export class MailRepository {
     }
     return await this.mysqlService.query(query, params);
   }
+  async checkMailByMailId(user_id: number, mail_id: number) {
+    const query = `
+            UPDATE TB_MAIL
+            SET MAIL_CHECKED = 1
+            WHERE MAIL_ID = ? AND USER_ID = ?;
+        `;
+    const params = [mail_id, user_id];
+    return await this.mysqlService.query(query, params);
+  }
 }

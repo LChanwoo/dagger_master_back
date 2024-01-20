@@ -42,7 +42,6 @@ export class ShopService {
       await this.shopRepository.getItemInfoByShopId(user_id, shop_id)
     )[0];
     const isHave = item.IS_HAVE;
-    console.log(isHave);
     if (isHave > 0) {
       return {
         message: '이미 구매한 아이템입니다.',
