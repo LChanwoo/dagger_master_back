@@ -7,6 +7,7 @@ import * as cookieParser from 'cookie-parser';
 import * as passport from 'passport';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const { SESSION_SECRET, PORT } = process.env;
 
@@ -36,6 +37,17 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(passport.initialize());
   app.use(passport.session());
+
+  const config = new DocumentBuilder()
+    .setTitle('API example')
+    .setDescription('The MoleKiller API description')
+    .setVersion('1.0')
+    .addTag('molekiller')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(PORT || 9400);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
