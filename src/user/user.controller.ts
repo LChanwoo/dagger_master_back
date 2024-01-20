@@ -5,8 +5,10 @@ import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { ItemService } from 'src/item/item.service';
 import { UserDataDto } from 'src/auth/dto/userData.dto';
 import { PostNicknameDto } from './dto/postNickname.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
+@ApiTags('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -25,6 +27,9 @@ export class UserController {
 
   @Post('nickname')
   @UseGuards(AuthenticatedGuard)
+  @ApiOperation({ summary: '닉네임 변경' })
+  @ApiResponse({ status: 200, description: '성공' })
+  @ApiResponse({ status: 500, description: '서버 에러' })
   async changeNickname(
     @User() user: UserDataDto,
     @Body() body: PostNicknameDto,
@@ -34,6 +39,9 @@ export class UserController {
 
   @Get('inventory')
   @UseGuards(AuthenticatedGuard)
+  @ApiOperation({ summary: '인벤토리 조회' })
+  @ApiResponse({ status: 200, description: '성공' })
+  @ApiResponse({ status: 500, description: '서버 에러' })
   async getUserInventory(@User() user: any) {
     return await this.itemService.getUserInventory(user.USER_ID);
   }
