@@ -8,6 +8,7 @@ import { LocalStrategy } from './auth.strategy';
 import { SessionSerializer } from './session.serializer';
 import { ItemModule } from 'src/item/item.module';
 import { UserModule } from 'src/user/user.module';
+import { SuperUserStrategy } from './auth.su.strategy';
 
 @Module({
   imports: [
@@ -17,6 +18,12 @@ import { UserModule } from 'src/user/user.module';
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, SessionSerializer, LocalStrategy],
+  providers: [
+    AuthService,
+    AuthRepository,
+    SessionSerializer,
+    LocalStrategy,
+    SuperUserStrategy,
+  ],
 })
 export class AuthModule {}

@@ -18,6 +18,7 @@ export class ShopRepository {
     private readonly itemRepository: ItemRepository,
   ) {}
 
+  // 상점 아이템 리스트 조회
   async getShopListOfSkin(user_id: number) {
     const query = `
                 SELECT
@@ -44,6 +45,7 @@ export class ShopRepository {
     const params = [user_id];
     return await this.mysqlService.query(query, params);
   }
+  // 상점 아이템 추가
   async postShopItem(
     itemId: number,
     price: number,
@@ -58,6 +60,7 @@ export class ShopRepository {
     const params = [itemId, price, startDate, endDate];
     return await this.mysqlService.query(query, params);
   }
+  // 상점 아이디로 아이템 조회
   async getItemInfoByShopId(user_id: number, shopId: number) {
     const query = `
                 SELECT

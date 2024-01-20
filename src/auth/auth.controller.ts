@@ -6,11 +6,25 @@ import { LoginDto } from './dto/login.dto';
 import { AuthenticatedGuard } from './authenticated.guard';
 import { UserDataDto } from './dto/userData.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SuperUserAuthGuard } from './auth.su.guard';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Post('/superuser')
+  @UseGuards(SuperUserAuthGuard)
+  @ApiOperation({ summary: '슈퍼유저 로그인' })
+  @ApiResponse({ status: 200, description: '성공' })
+  @ApiResponse({ status: 401, description: '로그인 실패' })
+  @ApiResponse({ status: 500, description: '서버 에러' })
+  public async superuserLogin(
+    @User() user: any,
+    @Body() body: any,
+  ): Promise<any> {
+    return user;
+  }
 
   @Post('/login')
   @UseGuards(LocalAuthGuard)

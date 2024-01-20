@@ -15,11 +15,6 @@ export class UserController {
     private readonly itemService: ItemService,
   ) {}
 
-  //   @Post('nickname')
-  //   async changeNickname(@User() user: any) {
-  //     return await this.userService.changeNickname();
-  //   }
-
   @Get('all')
   async getAllUser() {
     return await this.userService.getAllUser();

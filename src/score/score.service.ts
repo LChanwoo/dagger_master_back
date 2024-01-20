@@ -12,25 +12,31 @@ export class ScoreService {
   async getScoreList() {
     return await this.scoreRepository.getScoreList();
   }
-
+  // 유저 아이디로 최고 점수 가져오기
   async getMaxScoreByUserId(user_id: number) {
     return await this.scoreRepository.getMaxScoreByUserId(user_id);
   }
 
+  // 유저 아이디로 점수 리스트 가져오기
   async getScoreListWithUser(user_id: number) {
+    // 유저 아이디로 점수 리스트 가져오기
     const ranking = await this.scoreRepository.getScoreListWithUser(user_id);
+    // 랭킹 100위까지 가져오기
     const ranking_board = ranking.slice(0, 101);
+    // 유저 아이디로 유저 랭킹 가져오기
     const user_ranking = ranking.find((user) => user.USER_ID === user_id);
-    console.log(user_id);
     return {
       ranking_board,
       user_ranking,
     };
   }
 
+  // 유저 아이디로 점수 등록하기
   async createScoreByUserId(user_id: number, score: number) {
     try {
+      // 점수 등록
       await this.scoreRepository.createScoreByUserId(user_id, score);
+      // 골드 보상 지급
       await this.itemRepository.addPlayerGoldByUserId(user_id, score);
       return {
         message: '점수가 등록되었습니다.',
