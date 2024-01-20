@@ -5,10 +5,11 @@ import { UserDataDto } from 'src/auth/dto/userData.dto';
 import { FriendAcceptDto } from './dto/friendAccept.dto';
 import { FriendRequestDto } from './dto/friendRequest.dto';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('friend')
 @UseGuards(AuthenticatedGuard)
+@ApiTags('friend')
 export class FriendController {
   constructor(private readonly friendService: FriendService) {}
 

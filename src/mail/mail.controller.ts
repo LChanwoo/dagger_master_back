@@ -3,10 +3,11 @@ import { MailService } from './mail.service';
 import { User } from 'src/common/decorators/user.decorator';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { PostMailDto } from './dto/postMail.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('mail')
 @UseGuards(AuthenticatedGuard)
+@ApiTags('mail')
 export class MailController {
   constructor(private readonly mailService: MailService) {}
 
