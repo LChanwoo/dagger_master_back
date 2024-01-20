@@ -2,6 +2,8 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { FriendService } from './friend.service';
 import { User } from 'src/common/decorators/user.decorator';
 import { UserDataDto } from 'src/auth/dto/userData.dto';
+import { FriendAcceptDto } from './dto/friendAccept.dto';
+import { FriendRequestDto } from './dto/friendRequest.dto';
 
 @Controller('friend')
 export class FriendController {
@@ -13,7 +15,7 @@ export class FriendController {
   }
 
   @Post('/request')
-  async requestFriend(@User() user: any, @Body() body: any) {
+  async requestFriend(@User() user: any, @Body() body: FriendRequestDto) {
     return await this.friendService.requestFriend(user.USER_ID, body.friend_id);
   }
 
@@ -24,7 +26,10 @@ export class FriendController {
     );
   }
   @Post('/accept')
-  async acceptFriendByUsersId(@User() user: UserDataDto, @Body() body: any) {
+  async acceptFriendByUsersId(
+    @User() user: UserDataDto,
+    @Body() body: FriendAcceptDto,
+  ) {
     return await this.friendService.acceptFriendByUsersId(
       user.USER_ID,
       body.friend_id,
@@ -37,7 +42,7 @@ export class FriendController {
   }
 
   @Post('/delete')
-  async deleteFriend(@User() user: UserDataDto, @Body() body: any) {
+  async deleteFriend(@User() user: UserDataDto, @Body() body: FriendAcceptDto) {
     return await this.friendService.deleteFriend(user.USER_ID, body.friend_id);
   }
 }

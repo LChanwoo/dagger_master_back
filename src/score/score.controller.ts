@@ -3,6 +3,7 @@ import { ScoreService } from './score.service';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { UserDataDto } from 'src/auth/dto/userData.dto';
+import { PostScoreDto } from './dto/postScore.dto';
 
 @Controller('score')
 @UseGuards(AuthenticatedGuard)
@@ -25,7 +26,10 @@ export class ScoreController {
   }
 
   @Post()
-  async createScoreByUserId(@User() user: UserDataDto, @Body() body: any) {
+  async createScoreByUserId(
+    @User() user: UserDataDto,
+    @Body() body: PostScoreDto,
+  ) {
     const { score } = body;
     return await this.scoreService.createScoreByUserId(user.USER_ID, score);
   }
