@@ -20,7 +20,10 @@ import { FRIEND_REQUEST_OPTION } from './swagger/friendRequest.option';
 import { FRIEND_REQUESTED_OPTION } from './swagger/friendRequested.option';
 import { UNAUTHORIZED_OPTION } from 'src/common/swagger/401.option';
 import { INTERNER_SERVER_ERROR_OPTION } from 'src/common/swagger/500.option';
-import { FRIEND_ACCEPT_OPTION } from './swagger/frinedAccept.option';
+import {
+  FRIEND_ACCEPT_ERROR_OPTION,
+  FRIEND_ACCEPT_OPTION,
+} from './swagger/frinedAccept.option';
 import { FRINED_SUGGEST_OPTION } from './swagger/friendSuggest.option';
 import {
   FRINED_DELETE_OPTION1,
@@ -67,6 +70,7 @@ export class FriendController {
   @Post('/accept')
   @ApiOperation({ summary: '친구 요청 수락' })
   @ApiResponse(FRIEND_ACCEPT_OPTION)
+  @ApiResponse(FRIEND_ACCEPT_ERROR_OPTION)
   @ApiResponse(UNAUTHORIZED_OPTION)
   @ApiResponse(INTERNER_SERVER_ERROR_OPTION)
   async acceptFriendByUsersId(

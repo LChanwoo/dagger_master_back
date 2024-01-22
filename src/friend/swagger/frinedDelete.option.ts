@@ -25,7 +25,7 @@ export const FRINED_DELETE_OPTION1 = {
 };
 
 export const FRINED_DELETE_OPTION2 = {
-  status: 201,
+  status: 400,
   description: '성공',
   schema: {
     properties: {
@@ -37,7 +37,7 @@ export const FRINED_DELETE_OPTION2 = {
       status: {
         type: 'number',
         description: '상태 코드',
-        example: 201,
+        example: 400,
       },
       data: {
         type: 'object',

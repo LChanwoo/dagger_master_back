@@ -18,21 +18,23 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { SuperUserAuthGuard } from 'src/auth/auth.su.guard';
 
 @Controller('shop')
 @ApiTags('shop')
 @ApiCookieAuth('connect.sid')
 @UseInterceptors(SuccessInterceptor)
-@UseGuards(AuthenticatedGuard)
 export class ShopController {
   constructor(private readonly shopService: ShopService) {}
 
   @Get()
+  @UseGuards(AuthenticatedGuard)
   async getShopList(@User() user) {
     return await this.shopService.getShopSkinList(user.USER_ID);
   }
 
   @Post()
+  @UseGuards(SuperUserAuthGuard)
   @ApiOperation({ summary: '상점 아이템 등록' })
   @ApiResponse({ status: 200, description: '성공' })
   @ApiResponse({ status: 500, description: '서버 에러' })
@@ -47,6 +49,7 @@ export class ShopController {
     );
   }
   @Post('buy')
+  @UseGuards(AuthenticatedGuard)
   @ApiOperation({ summary: '상점 아이템 구매' })
   @ApiResponse({ status: 200, description: '성공' })
   @ApiResponse({ status: 500, description: '서버 에러' })

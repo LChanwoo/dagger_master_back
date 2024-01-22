@@ -17,7 +17,7 @@ export class AuthService {
     const suId = this.configService.get<string>('SUPER_ADMIN');
     const suPw = this.configService.get<string>('SUPER_ADMIN_PASSWORD');
     if (address === suId && password === suPw) {
-      return { address: suId };
+      return { email: suId };
     }
     return null;
   }
