@@ -95,10 +95,10 @@ export class FriendRepository {
     const query = `
             UPDATE TB_FRIEND_REQUEST
             SET IS_FRIEND = 1,
-                COMPLY_DATE = CURRENT_TIMESTAMP
+                COMPLY_DATE = NOW()
             WHERE FROM_USER = ? AND TO_USER = ?;
         `;
-    const params = [user_id, friend_id];
+    const params = [friend_id, user_id];
     return await this.mysqlService.query(query, params);
   }
 

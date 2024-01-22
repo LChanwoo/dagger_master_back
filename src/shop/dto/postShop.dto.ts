@@ -1,9 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class PostShopDto {
   @IsNumber()
   @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
   @ApiProperty({
     description: '아이템 id',
     example: 1,
@@ -13,6 +15,7 @@ export class PostShopDto {
 
   @IsNumber()
   @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
   @ApiProperty({
     description: '아이템 가격',
     example: 10000,

@@ -5,6 +5,8 @@ import {
   Post,
   UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ScoreService } from './score.service';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';

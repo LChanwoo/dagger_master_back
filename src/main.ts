@@ -39,9 +39,14 @@ async function bootstrap() {
   );
   app.enableCors({
     credentials: true,
+    origin: true,
   });
-  app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+  // app.useGlobalFilters(new HttpExceptionFilter());
   app.use(cookieParser());
   app.use(passport.initialize());
   app.use(passport.session());
@@ -59,7 +64,6 @@ async function bootstrap() {
     .setDescription('The MoleKiller API description')
     .setVersion('1.0')
     .addTag('molekiller')
-    .addCookieAuth('connect.sid')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

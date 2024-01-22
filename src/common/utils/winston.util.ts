@@ -13,9 +13,6 @@ const dailyOptions = (level: string) => {
     filename: `%DATE%.${level}.log`,
     maxFiles: 365, //30일치 로그파일 저장
     zippedArchive: true, // 로그가 쌓이면 압축하여 관리
-    timestamp: () => {
-      return new Date().toLocaleString();
-    },
   };
 };
 

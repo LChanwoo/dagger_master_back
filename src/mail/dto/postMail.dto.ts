@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class PostMailDto {
   @IsNumber()
+  @Transform(({ value }) => Number(value))
   @IsNotEmpty()
   @ApiProperty({
     description: '받는 사람의 id',
@@ -30,6 +32,7 @@ export class PostMailDto {
   readonly contents: string;
 
   @IsNumber()
+  @Transform(({ value }) => Number(value))
   @ApiProperty({
     description: '아이템 id',
     example: 1,
@@ -38,6 +41,7 @@ export class PostMailDto {
   readonly item_id: number;
 
   @IsNumber()
+  @Transform(({ value }) => Number(value))
   @ApiProperty({
     description: '아이템 수량',
     example: 1,

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ScoreRepository } from './score.repository';
 import { ItemRepository } from 'src/item/item.repository';
 
@@ -8,7 +8,7 @@ export class ScoreService {
     private readonly scoreRepository: ScoreRepository,
     private readonly itemRepository: ItemRepository,
   ) {}
-
+  private readonly logger = new Logger(ScoreService.name);
   async getScoreList() {
     return await this.scoreRepository.getScoreList();
   }
@@ -34,10 +34,12 @@ export class ScoreService {
   // 유저 아이디로 점수 등록하기
   async createScoreByUserId(user_id: number, score: number) {
     try {
+      console.log(user_id, score);
       // 점수 등록
       await this.scoreRepository.createScoreByUserId(user_id, score);
       // 골드 보상 지급
       await this.itemRepository.addPlayerGoldByUserId(user_id, score);
+      this.logger.log(`유저 아이디 ${user_id}에게 ${score}골드 지급`);
       return {
         message: '점수가 등록되었습니다.',
         added_gold: score,

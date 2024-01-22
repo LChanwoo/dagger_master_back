@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Inject,
+  Logger,
   Post,
   Req,
   UseGuards,
@@ -22,6 +23,8 @@ import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor'
 @ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  private readonly logger = new Logger('HTTP');
 
   @Post('/superuser')
   @UseGuards(SuperUserAuthGuard)
@@ -47,6 +50,10 @@ export class AuthController {
     @Body() body: LoginDto,
   ): Promise<any> {
     const { SUB_ID, CREATE_DATE, ...result } = user;
+    const now = new Date();
+    this.logger.log(
+      `${now.toLocaleString()} ${user.EMAIL}님이 로그인하셨습니다.`,
+    );
     return result;
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { MysqlService } from 'src/mysql/mysql.service';
 import { AuthRepository } from './auth.repository';
 import { ItemRepository } from 'src/item/item.repository';
@@ -25,11 +25,19 @@ export class AuthService {
   // 유저가 존재하는지 확인
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.authRepository.findUserByEmail(email);
-    if (user.length > 0 && user[0].SUB_ID === password) {
-      const { ...result } = user[0];
-      return result;
+    try {
+      if (user.length > 0) {
+        if (user[0].SUB_ID === password) {
+          const { ...result } = user[0];
+          return result;
+        } else {
+          throw new UnauthorizedException('sub_id가 일치하지 않습니다.');
+        }
+      }
+      return null;
+    } catch (err) {
+      return err.response;
     }
-    return null;
   }
   // 유저 생성
   async createUser(email: string, password: string) {

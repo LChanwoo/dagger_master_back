@@ -14,6 +14,7 @@ import { FriendRequestDto } from './dto/friendRequest.dto';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { ResponseFriendListDto } from './dto/responseFriendList.dto';
 
 @Controller('friend')
 @UseInterceptors(SuccessInterceptor)
@@ -27,7 +28,9 @@ export class FriendController {
   @ApiResponse({ status: 200, description: '성공' })
   @ApiResponse({ status: 401, description: '로그인 필요' })
   @ApiResponse({ status: 500, description: '서버 에러' })
-  async findFriendListByUser_id(@User() user: UserDataDto) {
+  async findFriendListByUser_id(
+    @User() user: UserDataDto,
+  ): Promise<ResponseFriendListDto> {
     return await this.friendService.findFriendListByUser_id(user.USER_ID);
   }
 
@@ -52,7 +55,10 @@ export class FriendController {
   }
   @Post('/accept')
   @ApiOperation({ summary: '친구 요청 수락' })
-  @ApiResponse({ status: 200, description: '성공' })
+  @ApiResponse({
+    status: 201,
+    description: '성공',
+  })
   @ApiResponse({ status: 401, description: '로그인 필요' })
   @ApiResponse({ status: 500, description: '서버 에러' })
   async acceptFriendByUsersId(
