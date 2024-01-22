@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FriendService } from './friend.service';
 import { User } from 'src/common/decorators/user.decorator';
 import { UserDataDto } from 'src/auth/dto/userData.dto';
@@ -6,8 +13,10 @@ import { FriendAcceptDto } from './dto/friendAccept.dto';
 import { FriendRequestDto } from './dto/friendRequest.dto';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @Controller('friend')
+@UseInterceptors(SuccessInterceptor)
 @UseGuards(AuthenticatedGuard)
 @ApiTags('friend')
 export class FriendController {

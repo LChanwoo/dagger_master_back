@@ -13,7 +13,6 @@ export class SuperUserStrategy extends PassportStrategy(Strategy, 'superuser') {
   }
 
   async validate(address: string, password: string, done: any) {
-    console.log(address, password);
     try {
       let user = await this.authService.validateSuperUser(address, password);
       if (!user) {

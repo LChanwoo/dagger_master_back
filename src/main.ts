@@ -9,11 +9,16 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as expressBasicAuth from 'express-basic-auth';
+import { ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { winstonLogger } from './common/utils/winston.util';
 
 const { SESSION_SECRET, PORT } = process.env;
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: winstonLogger,
+  });
   app.use(
     session({
       store: new RedisStore({
@@ -35,6 +40,8 @@ async function bootstrap() {
   app.enableCors({
     credentials: true,
   });
+  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new HttpExceptionFilter());
   app.use(cookieParser());
   app.use(passport.initialize());
   app.use(passport.session());

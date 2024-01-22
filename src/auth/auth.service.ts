@@ -16,7 +16,6 @@ export class AuthService {
   async validateSuperUser(address: string, password: string): Promise<any> {
     const suId = this.configService.get<string>('SUPER_ADMIN');
     const suPw = this.configService.get<string>('SUPER_ADMIN_PASSWORD');
-    console.log(suId, suPw);
     if (address === suId && password === suPw) {
       return { address: suId };
     }

@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  Post,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './auth.guard';
 import { User } from 'src/common/decorators/user.decorator';
@@ -7,8 +15,10 @@ import { AuthenticatedGuard } from './authenticated.guard';
 import { UserDataDto } from './dto/userData.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SuperUserAuthGuard } from './auth.su.guard';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @Controller('auth')
+@UseInterceptors(SuccessInterceptor)
 @ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -38,7 +48,6 @@ export class AuthController {
   ): Promise<any> {
     const { SUB_ID, CREATE_DATE, ...result } = user;
     return result;
-    // return this.logger.log(user.email + ' logged in ' + new Date().toISOString());
   }
 
   @Post('/logout')

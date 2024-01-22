@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ShopService } from './shop.service';
 import { User } from 'src/common/decorators/user.decorator';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
@@ -10,10 +17,12 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @Controller('shop')
 @ApiTags('shop')
 @ApiCookieAuth('connect.sid')
+@UseInterceptors(SuccessInterceptor)
 @UseGuards(AuthenticatedGuard)
 export class ShopController {
   constructor(private readonly shopService: ShopService) {}

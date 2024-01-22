@@ -1,12 +1,22 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { MailService } from './mail.service';
 import { User } from 'src/common/decorators/user.decorator';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { PostMailDto } from './dto/postMail.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @Controller('mail')
 @UseGuards(AuthenticatedGuard)
+@UseInterceptors(SuccessInterceptor)
 @ApiTags('mail')
 export class MailController {
   constructor(private readonly mailService: MailService) {}

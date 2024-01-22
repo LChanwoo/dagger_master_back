@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from 'src/common/decorators/user.decorator';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
@@ -6,8 +13,10 @@ import { ItemService } from 'src/item/item.service';
 import { UserDataDto } from 'src/auth/dto/userData.dto';
 import { PostNicknameDto } from './dto/postNickname.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @Controller('user')
+@UseInterceptors(SuccessInterceptor)
 @ApiTags('user')
 export class UserController {
   constructor(

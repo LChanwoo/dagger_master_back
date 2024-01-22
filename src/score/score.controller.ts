@@ -1,13 +1,22 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ScoreService } from './score.service';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { UserDataDto } from 'src/auth/dto/userData.dto';
 import { PostScoreDto } from './dto/postScore.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @Controller('score')
 @UseGuards(AuthenticatedGuard)
+@UseInterceptors(SuccessInterceptor)
 @ApiTags('score')
 export class ScoreController {
   constructor(private readonly scoreService: ScoreService) {}
