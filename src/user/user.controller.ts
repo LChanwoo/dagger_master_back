@@ -24,10 +24,10 @@ export class UserController {
     private readonly itemService: ItemService,
   ) {}
 
-  @Get('all')
-  async getAllUser() {
-    return await this.userService.getAllUser();
-  }
+  //   @Get('all')
+  //   async getAllUser() {
+  //     return await this.userService.getAllUser();
+  //   }
 
   @Post('nickname')
   @UseGuards(AuthenticatedGuard)

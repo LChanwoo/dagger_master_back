@@ -17,6 +17,11 @@ import { UserDataDto } from './dto/userData.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SuperUserAuthGuard } from './auth.su.guard';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { UNAUTHORIZED_OPTION } from 'src/common/swagger/401.option';
+import { INTERNER_SERVER_ERROR_OPTION } from 'src/common/swagger/500.option';
+import { SuperLoginDto } from './dto/superLogin.dto copy';
+import { SUPER_USER_LOGIN_OPTION } from './swagger/superUserLogin.option';
+import { USER_LOGIN_OPTION } from './swagger/userLogin.option';
 
 @Controller('auth')
 @UseInterceptors(SuccessInterceptor)
@@ -29,12 +34,12 @@ export class AuthController {
   @Post('/superuser')
   @UseGuards(SuperUserAuthGuard)
   @ApiOperation({ summary: '슈퍼유저 로그인' })
-  @ApiResponse({ status: 200, description: '성공' })
-  @ApiResponse({ status: 401, description: '로그인 실패' })
-  @ApiResponse({ status: 500, description: '서버 에러' })
+  @ApiResponse(SUPER_USER_LOGIN_OPTION)
+  @ApiResponse(UNAUTHORIZED_OPTION)
+  @ApiResponse(INTERNER_SERVER_ERROR_OPTION)
   public async superuserLogin(
     @User() user: any,
-    @Body() body: any,
+    @Body() body: SuperLoginDto,
   ): Promise<any> {
     return user;
   }
@@ -42,9 +47,9 @@ export class AuthController {
   @Post('/login')
   @UseGuards(LocalAuthGuard)
   @ApiOperation({ summary: '로그인' })
-  @ApiResponse({ status: 200, description: '성공' })
-  @ApiResponse({ status: 401, description: '로그인 실패' })
-  @ApiResponse({ status: 500, description: '서버 에러' })
+  @ApiResponse(USER_LOGIN_OPTION)
+  @ApiResponse(UNAUTHORIZED_OPTION)
+  @ApiResponse(INTERNER_SERVER_ERROR_OPTION)
   public async login(
     @User() user: UserDataDto,
     @Body() body: LoginDto,
@@ -60,9 +65,7 @@ export class AuthController {
   @Post('/logout')
   @UseGuards(AuthenticatedGuard)
   @ApiOperation({ summary: '로그아웃' })
-  @ApiResponse({ status: 200, description: '성공' })
-  @ApiResponse({ status: 401, description: '로그인 필요' })
-  @ApiResponse({ status: 500, description: '서버 에러' })
+  @ApiResponse({ status: 201, description: '성공' })
   public async logout(@Req() req: any) {
     try {
       req.session.destroy();
