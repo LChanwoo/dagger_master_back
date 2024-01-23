@@ -8,10 +8,11 @@ export class ScoreRepository {
   async getScoreList() {
     const query = `
             SELECT
+                (DENSE_RANK() OVER (ORDER BY MAX(A.SCORE) DESC)) AS RANKING,
+                B.USER_ID,
                 B.EMAIL,
                 B.NICKNAME,
                 MAX(A.SCORE) AS SCORE,
-                (DENSE_RANK() OVER (ORDER BY MAX(A.SCORE) DESC)) AS RANKING,
                 MAX(A.PLAY_DATE) AS PLAY_DATE
             FROM TB_RESULT A
                 INNER JOIN TB_USER B
@@ -36,20 +37,9 @@ export class ScoreRepository {
             GROUP BY A.USER_ID
             ORDER BY MAX(SCORE) DESC
             LIMIT 100)
-            UNION
-            (SELECT
-                B.USER_ID,
-                B.EMAIL,
-                B.NICKNAME,
-                MAX(SCORE) AS SCORE
-            FROM TB_RESULT A
-                INNER JOIN TB_USER B
-                ON A.USER_ID = B.USER_ID
-            WHERE A.USER_ID = ?
-            GROUP BY A.USER_ID);
         `;
     const params = [user_id];
-    return await this.mysqlService.query(query, params);
+    return await this.mysqlService.query(query);
   }
 
   async getMaxScoreByUserId(user_id: number) {
