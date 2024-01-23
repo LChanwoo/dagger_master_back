@@ -14,6 +14,9 @@ import { UserDataDto } from 'src/auth/dto/userData.dto';
 import { PostNicknameDto } from './dto/postNickname.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { POST_NICKNAME_OPTION } from './swagger/postNickName.option';
+import { INTERNER_SERVER_ERROR_OPTION } from 'src/common/swagger/500.option';
+import { GET_USER_INVENTORY_OPTION } from './swagger/getUserInventory.option';
 
 @Controller('user')
 @UseInterceptors(SuccessInterceptor)
@@ -32,8 +35,8 @@ export class UserController {
   @Post('nickname')
   @UseGuards(AuthenticatedGuard)
   @ApiOperation({ summary: '닉네임 변경' })
-  @ApiResponse({ status: 200, description: '성공' })
-  @ApiResponse({ status: 500, description: '서버 에러' })
+  @ApiResponse(POST_NICKNAME_OPTION)
+  @ApiResponse(INTERNER_SERVER_ERROR_OPTION)
   async changeNickname(
     @User() user: UserDataDto,
     @Body() body: PostNicknameDto,
@@ -44,8 +47,8 @@ export class UserController {
   @Get('inventory')
   @UseGuards(AuthenticatedGuard)
   @ApiOperation({ summary: '인벤토리 조회' })
-  @ApiResponse({ status: 200, description: '성공' })
-  @ApiResponse({ status: 500, description: '서버 에러' })
+  @ApiResponse(GET_USER_INVENTORY_OPTION)
+  @ApiResponse(INTERNER_SERVER_ERROR_OPTION)
   async getUserInventory(@User() user: any) {
     return await this.itemService.getUserInventory(user.USER_ID);
   }
