@@ -10,8 +10,8 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as expressBasicAuth from 'express-basic-auth';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { winstonLogger } from './common/utils/winston.util';
+import helmet from 'helmet';
 
 const { SESSION_SECRET, PORT } = process.env;
 
@@ -46,7 +46,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  // app.useGlobalFilters(new HttpExceptionFilter());
+  app.use(helmet());
   app.use(cookieParser());
   app.use(passport.initialize());
   app.use(passport.session());

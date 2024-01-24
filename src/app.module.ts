@@ -11,8 +11,6 @@ import { ItemModule } from './item/item.module';
 import { MailModule } from './mail/mail.module';
 import { RedisModule } from './redis/redis.module';
 import { ShopModule } from './shop/shop.module';
-import { WinstonModule, utilities } from 'nest-winston';
-import * as winston from 'winston';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 
 @Module({
@@ -30,8 +28,8 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
     RedisModule,
     ShopModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
