@@ -80,7 +80,6 @@ export class MailController {
   @ApiResponse(INTERNER_SERVER_ERROR_OPTION)
   async getAllMail(@User() user: any) {
     const { USER_ID } = user;
-    console.log(USER_ID);
     return await this.mailService.recieveAllMailAndItem(USER_ID);
   }
 }

@@ -59,7 +59,10 @@ export class AuthController {
     this.logger.log(
       `${now.toLocaleString()} ${user.EMAIL}님이 로그인하셨습니다.`,
     );
-    return result;
+    const attendanceCheck = await this.authService.checkAttendance(
+      user.USER_ID,
+    );
+    return attendanceCheck;
   }
 
   @Post('/logout')

@@ -53,4 +53,21 @@ export class AuthService {
   async updateLoginDate(user_id: number) {
     return await this.authRepository.updateLoginDate(user_id);
   }
+  // 출석 체크
+  async checkAttendance(user_id: number) {
+    const attendanceData = await this.authRepository.getAttendanceData(user_id);
+    if (attendanceData.length === 0) {
+      await this.authRepository.insertAttendanceData(user_id);
+      const sevendaysAttendanceData =
+        await this.authRepository.select7daysAttendanceData(user_id);
+      return {
+        attendanceData: sevendaysAttendanceData,
+        attendanceCheck: true,
+      };
+    } else {
+      return {
+        attendanceCheck: false,
+      };
+    }
+  }
 }

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { MailRepository } from './mail.respository';
 import { ItemRepository } from 'src/item/item.repository';
 import { ItemService } from 'src/item/item.service';
@@ -33,7 +37,7 @@ export class MailService {
     );
     //메일이 없으면 에러
     if (mail.length === 0) {
-      return { message: '해당 메일을 읽을 수 없습니다.' };
+      throw new ForbiddenException('해당 메일을 읽을 수 없습니다.');
     }
     //메일이 이미 읽었으면 에러
     if (mail[0].ITEM_RECEIVED === 1) {
@@ -42,7 +46,7 @@ export class MailService {
     const { ITEM_ID, ITEM_QTY } = mail[0];
     //메일에 아이템이 없으면 에러
     if (ITEM_ID === null) {
-      return { message: '아이템이 없습니다.' };
+      throw new BadRequestException('아이템이 없습니다.');
     }
     //유저 인벤토리 확인
     const userInventory = await this.itemRepository.getUserInventory(user_id);
@@ -81,10 +85,14 @@ export class MailService {
   ) {
     //메일 제목, 내용 길이 확인
     if (title.length > 20) {
-      return { message: '제목은 20자 이하로 작성해주세요.' };
+      throw new BadRequestException({
+        message: '제목은 20자 이하로 작성해주세요.',
+      });
     }
     if (contents.length > 50) {
-      return { message: '내용은 50자 이하로 작성해주세요.' };
+      throw new BadRequestException({
+        message: '내용은 50자 이하로 작성해주세요.',
+      });
     }
 
     try {

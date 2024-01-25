@@ -30,4 +30,39 @@ export class AuthRepository {
     const params = [user_id];
     return await this.mysqlService.query(query, params);
   }
+  async getAttendanceData(user_id: number) {
+    const query = `
+            SELECT *
+            FROM TB_ATTENDANCE
+            WHERE
+                USER_ID = ?
+                AND
+                DATE_FORMAT(ATT_DATE, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+            ;
+        `;
+    const params = [user_id];
+    return await this.mysqlService.query(query, params);
+  }
+  async insertAttendanceData(user_id: number) {
+    const query = `
+            INSERT INTO TB_ATTENDANCE
+                (USER_ID, ATT_DATE)
+            VALUES (?, NOW());
+        `;
+    const params = [user_id];
+    return await this.mysqlService.query(query, params);
+  }
+  async select7daysAttendanceData(user_id: number) {
+    const query = `
+            SELECT *
+            FROM TB_ATTENDANCE
+            WHERE
+                USER_ID = ?
+                AND
+                DATE_FORMAT(ATT_DATE, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d') - INTERVAL 7 DAY
+            ;
+        `;
+    const params = [user_id];
+    return await this.mysqlService.query(query, params);
+  }
 }
