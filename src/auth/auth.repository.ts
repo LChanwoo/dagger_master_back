@@ -54,15 +54,14 @@ export class AuthRepository {
   }
   async select7daysAttendanceData(user_id: number) {
     const query = `
-            SELECT *
+            SELECT count(*)%8 as COUNT
             FROM TB_ATTENDANCE
             WHERE
                 USER_ID = ?
-                AND
-                DATE_FORMAT(ATT_DATE, '%Y-%m-%d') >= DATE_FORMAT(NOW(), '%Y-%m-%d') - INTERVAL 7 DAY
             ;
+    
         `;
     const params = [user_id];
-    return await this.mysqlService.query(query, params);
+    return (await this.mysqlService.query(query, params))[0];
   }
 }
